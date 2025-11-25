@@ -124,9 +124,7 @@ class IntroScreen extends StatelessWidget {
                                 ),
                               ),
                               onPressed: () {
-                                // TODO: point this where you want first
-                                // e.g. '/profile-setup' or '/browse'
-                                Navigator.pushNamed(context, '/browse');
+                                Navigator.pushNamed(context, '/login');
                               },
                               child: const Text(
                                 "Get Started",

@@ -1,258 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'profile_setup.dart';
-import 'category_results.dart';
-
-
-class BrowseScreen extends StatefulWidget {
-  const BrowseScreen({super.key});
-
-  @override
-  State<BrowseScreen> createState() => _BrowseScreenState();
-}
-
-class _BrowseScreenState extends State<BrowseScreen> {
-  String _searchQuery = '';
-  String? _selectedCategoryId;
-
-  // Same category IDs as profile setup
-  static const List<Map<String, String>> _allOfferCategories = [
-    {'id': 'technical', 'label': 'Technical'},
-    {'id': 'creative', 'label': 'Creative / Artistic'},
-    {'id': 'academic', 'label': 'Academic / Educational'},
-    {'id': 'business', 'label': 'Business / Professional'},
-    {'id': 'trades', 'label': 'Trades / Hands-On'},
-    {'id': 'lifestyle', 'label': 'Lifestyle & Personal Dev'},
-    {'id': 'social', 'label': 'Social & Community'},
-    {'id': 'digital_content', 'label': 'Digital Content / Social Media'},
-    {'id': 'career', 'label': 'Career & Tech Advancement'},
-  ];
-
-  static const Map<String, IconData> _categoryIcons = {
-    'technical': Icons.code,
-    'creative': Icons.palette_rounded,
-    'academic': Icons.menu_book_rounded,
-    'business': Icons.business_center_rounded,
-    'trades': Icons.handyman_rounded,
-    'lifestyle': Icons.self_improvement_rounded,
-    'social': Icons.people_alt_rounded,
-    'digital_content': Icons.smartphone_rounded,
-    'career': Icons.trending_up_rounded,
-  };
-
-  void _onMyProfileTap() {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('You need to be signed in to view your profile.'),
-        ),
-      );
-      return;
-    }
-
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => const ProfileSetupScreen(),
-      ),
-    );
-  }
-
-void _onCategoryTap(String id, String label) {
-  Navigator.of(context).push(
-    MaterialPageRoute(
-      builder: (_) => CategoryResultsScreen(
-        categoryId: id,
-        categoryLabel: label,
-      ),
-    ),
-  );
-}
-
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Scaffold(
-      backgroundColor: const Color(0xFFF7F9FC),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: const Text(
-          'Discover Skill Swaps',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.person_outline, color: Colors.black),
-            tooltip: 'My profile',
-            onPressed: _onMyProfileTap,
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 🔍 Search Bar (UI only for now)
-            TextField(
-              decoration: InputDecoration(
-                hintText: "Search people or skills... (coming soon)",
-                hintStyle: TextStyle(
-                  color: Colors.grey.shade600,
-                  fontSize: 15,
-                ),
-                prefixIcon:
-                    Icon(Icons.search_rounded, color: Colors.grey.shade600),
-                filled: true,
-                fillColor: Colors.white,
-                contentPadding: const EdgeInsets.symmetric(vertical: 14),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                  borderSide: BorderSide(color: Colors.grey.shade200),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                  borderSide: BorderSide(
-                    color: Colors.blue.shade400,
-                    width: 1.4,
-                  ),
-                ),
-              ),
-              style: const TextStyle(fontSize: 15),
-              onChanged: (value) {
-                setState(() {
-                  _searchQuery = value.trim();
-                });
-              },
-            ),
-
-            const SizedBox(height: 24),
-
-            // 🔹 Categories
-            Text(
-              "Browse by category",
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                color: Colors.grey.shade900,
-              ),
-            ),
-            const SizedBox(height: 12),
-
-            GridView.count(
-              crossAxisCount: 3,
-              shrinkWrap: true,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              physics: const NeverScrollableScrollPhysics(),
-              childAspectRatio: 1.1,
-              children: _allOfferCategories.map((cat) {
-                final id = cat['id']!;
-                final label = cat['label']!;
-                final icon = _categoryIcons[id] ?? Icons.category_rounded;
-                final isSelected = _selectedCategoryId == id;
-
-                return CategoryTile(
-                  icon: icon,
-                  label: label,
-                  selected: isSelected,
-                  onTap: () => _onCategoryTap(id, label),
-                );
-              }).toList(),
-            ),
-
-            const SizedBox(height: 24),
-
-            Text(
-              "Tap a category to see people who offer skills in that area.",
-              style: TextStyle(
-                color: Colors.grey.shade600,
-                fontSize: 13,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// ===================== CATEGORY TILE =====================
-
-class CategoryTile extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  const CategoryTile({
-    super.key,
-    required this.icon,
-    required this.label,
-    required this.selected,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final baseColor = Colors.blue.shade600;
-
-    return InkWell(
-      borderRadius: BorderRadius.circular(18),
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: selected ? baseColor.withOpacity(0.08) : Colors.white,
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(
-            color: selected ? baseColor : Colors.grey.shade200,
-            width: selected ? 1.5 : 1,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.04),
-              blurRadius: 10,
-              offset: const Offset(0, 4),
-            )
-          ],
-        ),
-        padding: const EdgeInsets.all(14),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              size: 26,
-              color: selected ? baseColor : Colors.blue.shade600,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              label,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: selected ? Colors.black : Colors.grey.shade800,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// ===================== CATEGORY RESULTS SCREEN =====================
 
 class CategoryResultsScreen extends StatelessWidget {
   final String categoryId;
@@ -266,8 +14,6 @@ class CategoryResultsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
     return Scaffold(
       backgroundColor: const Color(0xFFF7F9FC),
       appBar: AppBar(
@@ -296,11 +42,33 @@ class CategoryResultsScreen extends StatelessWidget {
           }
 
           final docs = snapshot.data?.docs ?? [];
+          final currentUser = FirebaseAuth.instance.currentUser;
+          final currentUserId = currentUser?.uid;
+          final currentUserEmail = currentUser?.email;
 
           final filtered = docs.where((doc) {
             final data = doc.data() as Map<String, dynamic>;
-            final offersDynamic =
-                data['offers'] as List<dynamic>? ?? [];
+
+            // ---------- 🚫 Don't show the signed-in user ----------
+            if (currentUserId != null || currentUserEmail != null) {
+              final docUid = (data['uid'] ?? '').toString();
+              final docEmail = (data['email'] ?? '').toString();
+
+              final isSameById = currentUserId != null && doc.id == currentUserId;
+              final isSameByUidField =
+                  currentUserId != null && docUid.isNotEmpty && docUid == currentUserId;
+              final isSameByEmail = currentUserEmail != null &&
+                  currentUserEmail.isNotEmpty &&
+                  docEmail.isNotEmpty &&
+                  docEmail == currentUserEmail;
+
+              if (isSameById || isSameByUidField || isSameByEmail) {
+                return false;
+              }
+            }
+            // ----------------------------------------------------
+
+            final offersDynamic = data['offers'] as List<dynamic>? ?? [];
             final offers =
                 offersDynamic.whereType<Map<String, dynamic>>().toList();
 
@@ -423,7 +191,7 @@ class UserSkillCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Top row: avatar + name
+          // Avatar + name
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
