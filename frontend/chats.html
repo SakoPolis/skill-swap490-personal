@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SkillSwap – Chats</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #f4f5ff;
+      --card-bg: #ffffff;
+      --primary: #6b5bff;
+      --primary-soft: #ede9ff;
+      --text-main: #1f2933;
+      --text-sub: #6b7280;
+      --border-soft: #e5e7eb;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+      --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+      background: radial-gradient(circle at top, #eef2ff 0, #f9fafb 40%);
+      min-height: 100vh;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      padding: 24px;
+      color: var(--text-main);
+    }
+
+    .app-shell {
+      max-width: 1200px;
+      width: 100%;
+      background: var(--card-bg);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-soft);
+      padding: 22px 26px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* HEADER */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #6b5bff, #a855f7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .brand-title {
+      font-weight: 800;
+      font-size: 22px;
+      color: var(--primary);
+    }
+
+    .brand-sub {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .notif-wrapper {
+      position: relative;
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: #f3f4ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: #4b5563;
+    }
+
+    .notif-dot {
+      position: absolute;
+      top: 3px;
+      right: 4px;
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #ef4444;
+      border: 1px solid #fff;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #f97316, #ec4899);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    /* NAV – pill active tab */
+    .nav-row { display: flex; justify-content: center; }
+
+    .nav-tabs {
+      display: inline-flex;
+      align-items: center;
+      gap: 24px;
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      padding: 6px 16px;
+      border-radius: 999px;
+      color: inherit;
+      transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+    }
+
+    .nav-link.active {
+      background: #f3edff;
+      color: var(--primary);
+      box-shadow: 0 4px 14px rgba(148, 163, 184, 0.55);
+      font-weight: 600;
+    }
+
+    .nav-link:hover:not(.active) { color: #4b5563; }
+
+    /* GENERIC CARD */
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(229, 231, 235, 0.9);
+      padding: 16px 18px;
+    }
+
+    @media (max-width: 960px) {
+      body { padding: 12px; }
+      .app-shell { padding: 18px 16px 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- HEADER -->
+    <header class="top-bar">
+      <div class="brand-row">
+        <div class="logo-icon">🤝</div>
+        <div>
+          <div class="brand-title">SkillSwap</div>
+          <div class="brand-sub">Trade skills, build community</div>
+        </div>
+      </div>
+
+      <div class="top-right">
+        <div class="notif-wrapper">
+          🔔
+          <span class="notif-dot"></span>
+        </div>
+        <div class="avatar">S</div>
+      </div>
+    </header>
+
+    <!-- NAV (Chats active) -->
+    <div class="nav-row">
+      <nav class="nav-tabs">
+        <a href="home.html"    class="nav-link">Home</a>
+        <a href="explore.html" class="nav-link">Explore</a>
+        <a href="chats.html"   class="nav-link active">Chats</a>
+        <a href="swaps.html"   class="nav-link">Swaps</a>
+        <a href="profile.html" class="nav-link">Profile</a>
+      </nav>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="card" style="max-width: 700px; margin: 40px auto 0;">
+      <h2 style="margin-bottom: 8px;">Chats</h2>
+      <p style="font-size: 14px; color: var(--text-sub); margin-bottom: 16px;">
+        This is a placeholder for your messaging UI. In the real app, this is
+        where conversations with your SkillSwap matches will appear.
+      </p>
+      <p style="font-size: 13px; color: var(--text-sub);">
+        You can later replace this card with a list of chats, message threads,
+        and a detailed conversation view.
+      </p>
+    </div>
+  </div>
+</body>
+</html>
