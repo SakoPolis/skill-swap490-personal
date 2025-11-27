@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SkillSwap – Explore</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- copy the SAME <style> block from home.html here -->
+  <style>
+    /* paste the entire CSS from home.html here, unchanged */
+    /* ... for brevity not repeated in this snippet ... */
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <!-- HEADER -->
+    <header class="top-bar">
+      <div class="brand-row">
+        <div class="logo-icon">🤝</div>
+        <div>
+          <div class="brand-title">SkillSwap</div>
+          <div class="brand-sub">Trade skills, build community</div>
+        </div>
+      </div>
+
+      <div class="top-right">
+        <div class="notif-wrapper">
+          🔔
+          <span class="notif-dot"></span>
+        </div>
+        <div class="avatar">S</div>
+      </div>
+    </header>
+
+    <!-- NAV (Explore active) -->
+    <div class="nav-row">
+      <nav class="nav-tabs">
+        <a href="home.html"    class="nav-link">Home</a>
+        <a href="explore.html" class="nav-link active">Explore</a>
+        <a href="chats.html"   class="nav-link">Chats</a>
+        <a href="swaps.html"   class="nav-link">Swaps</a>
+        <a href="profile.html" class="nav-link">Profile</a>
+      </nav>
+    </div>
+
+    <!-- CONTENT: Explore layout -->
+    <div class="layout">
+      <!-- left column: search + categories -->
+      <section>
+        <div class="card" style="margin-bottom:10px;">
+          <div class="search-bar">
+            <span>🔍</span>
+            <input type="text" placeholder="What do you want to learn?" />
+            <span>🎙️</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="section-title">Browse Categories</h2>
+
+          <div class="categories-grid">
+            <article class="category-card tech">
+              <div class="cat-pill">💻</div>
+              <div class="category-name">Tech</div>
+              <div class="category-meta">240+ skills</div>
+              <a href="#" class="category-link">View skills →</a>
+            </article>
+
+            <article class="category-card arts">
+              <div class="cat-pill">🎭</div>
+              <div class="category-name">Arts</div>
+              <div class="category-meta">180+ skills</div>
+              <a href="#" class="category-link">View skills →</a>
+            </article>
+
+            <article class="category-card fit">
+              <div class="cat-pill">💪</div>
+              <div class="category-name">Fitness</div>
+              <div class="category-meta">95+ skills</div>
+              <a href="#" class="category-link">View skills →</a>
+            </article>
+
+            <article class="category-card lang">
+              <div class="cat-pill">🌐</div>
+              <div class="category-name">Languages</div>
+              <div class="category-meta">50+ skills</div>
+              <a href="#" class="category-link">View skills →</a>
+            </article>
+
+            <article class="category-card cook">
+              <div class="cat-pill">🍳</div>
+              <div class="category-name">Cooking</div>
+              <div class="category-meta">120+ skills</div>
+              <a href="#" class="category-link">View skills →</a>
+            </article>
+
+            <article class="category-card music">
+              <div class="cat-pill">🎵</div>
+              <div class="category-name">Music</div>
+              <div class="category-meta">85+ skills</div>
+              <a href="#" class="category-link">View skills →</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- right column: featured offers -->
+      <main class="card">
+        <div class="section-header">
+          <h2 class="section-title" style="margin-bottom:0;">Featured Offers</h2>
+          <a href="#">See all</a>
+        </div>
+
+        <div class="offers-list">
+          <article class="offer-card">
+            <div class="offer-avatar">A</div>
+            <div class="offer-main">
+              <div class="offer-top-row">
+                <span>Alex Chen</span>
+                <span class="offer-rating">⭐ 4.9</span>
+              </div>
+              <div class="offer-label">
+                Teaching: <strong>React Development</strong>
+              </div>
+              <div class="offer-label">
+                Looking for: <strong>Spanish Lessons</strong>
+              </div>
+              <div class="offer-tags">
+                <span class="pill pill-online">🟢 Online</span>
+                <span class="pill">Available now</span>
+              </div>
+            </div>
+            <div class="offer-cta">
+              <a href="#">Connect</a>
+            </div>
+          </article>
+
+          <article class="offer-card">
+            <div class="offer-avatar">S</div>
+            <div class="offer-main">
+              <div class="offer-top-row">
+                <span>Sarah Miller</span>
+                <span class="offer-rating">⭐ 4.8</span>
+              </div>
+              <div class="offer-label">
+                Teaching: <strong>Photography</strong>
+              </div>
+              <div class="offer-label">
+                Looking for: <strong>Guitar Lessons</strong>
+              </div>
+              <div class="offer-tags">
+                <span class="pill pill-city">📍 NYC</span>
+                <span class="pill pill-reviews">3 reviews</span>
+              </div>
+            </div>
+            <div class="offer-cta">
+              <a href="#">Connect</a>
+            </div>
+          </article>
+
+          <article class="offer-card">
+            <div class="offer-avatar">M</div>
+            <div class="offer-main">
+              <div class="offer-top-row">
+                <span>Marcus Johnson</span>
+                <span class="offer-rating">⭐ 5.0</span>
+              </div>
+              <div class="offer-label">
+                Teaching: <strong>Fitness Training</strong>
+              </div>
+              <div class="offer-label">
+                Looking for: <strong>Web Design</strong>
+              </div>
+              <div class="offer-tags">
+                <span class="pill pill-city">📍 LA</span>
+                <span class="pill pill-reviews">15 reviews</span>
+              </div>
+            </div>
+            <div class="offer-cta">
+              <a href="#">Connect</a>
+            </div>
+          </article>
+
+          <article class="offer-card">
+            <div class="offer-avatar">E</div>
+            <div class="offer-main">
+              <div class="offer-top-row">
+                <span>Emma Wilson</span>
+                <span class="offer-rating">⭐ 4.7</span>
+              </div>
+              <div class="offer-label">
+                Teaching: <strong>French Language</strong>
+              </div>
+              <div class="offer-label">
+                Looking for: <strong>Yoga Classes</strong>
+              </div>
+              <div class="offer-tags">
+                <span class="pill pill-online">🟢 Online</span>
+                <span class="pill pill-reviews">8 reviews</span>
+              </div>
+            </div>
+            <div class="offer-cta">
+              <a href="#">Connect</a>
+            </div>
+          </article>
+        </div>
+      </main>
+    </div>
+  </div>
+</body>
+</html>
