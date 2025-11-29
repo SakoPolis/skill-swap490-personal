@@ -104,7 +104,7 @@ void _onCategoryTap(String id, String label) {
             // 🔍 Search Bar (UI only for now)
             TextField(
               decoration: InputDecoration(
-                hintText: "Search people or skills... (coming soon123)",
+                hintText: "Search people or skills... (coming soon)",
                 hintStyle: TextStyle(
                   color: Colors.grey.shade600,
                   fontSize: 15,
