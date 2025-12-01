@@ -3,7 +3,7 @@ name: Deploy Flutter Web to GitHub Pages
 on:
   push:
     branches:
-      - main   # change this if your default branch is different
+      - main   # change this if default branch is different
 
 permissions:
   contents: write
@@ -27,8 +27,9 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
-      - name: Build web
-        run: flutter build web --release
+     
+      - name: Build web for GitHub Pages
+        run: flutter build web --release --base-href "/skill-swap490/"
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
@@ -37,4 +38,3 @@ jobs:
           publish_dir: ./build/web
           publish_branch: gh-pages
           force_orphan: true
-
