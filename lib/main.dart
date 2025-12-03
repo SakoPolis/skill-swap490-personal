@@ -8,7 +8,6 @@ import 'screens/login.dart';
 import 'screens/browse.dart';
 import 'screens/messages.dart';
 import 'screens/profile_setup.dart';
-import 'screens/request_swap.dart';
 import 'screens/lesson_details.dart';
 
 Future<void> main() async {
@@ -41,7 +40,6 @@ class MyApp extends StatelessWidget {
         '/browse': (context) => const BrowseScreen(),
         '/messages': (context) => const MessagesScreen(),
         '/profile-setup': (context) => const ProfileSetupScreen(),
-        '/request-swap': (context) => const RequestSwapScreen(),
         '/lesson-details': (context) =>
             const LessonDetailsScreen(id: 'placeholder'),
       },

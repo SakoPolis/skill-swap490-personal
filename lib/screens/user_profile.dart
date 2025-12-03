@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'request_swap.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class UserProfileScreen extends StatelessWidget {
+class UserProfileScreen extends StatefulWidget {
   final String name;
   final List<Map<String, dynamic>> offers;
 
@@ -12,10 +14,44 @@ class UserProfileScreen extends StatelessWidget {
   });
 
   @override
+  State<UserProfileScreen> createState() => _UserProfileScreenState();
+}
+
+class _UserProfileScreenState extends State<UserProfileScreen> {
+  List<Map<String, dynamic>> myOffers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadMyOffers();
+  }
+
+  Future<void> _loadMyOffers() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user == null) return;
+
+    final doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid)
+        .get();
+
+    final data = doc.data();
+    if (data == null) return;
+
+    final offersDynamic = data['offers'] as List<dynamic>? ?? [];
+
+    setState(() {
+      myOffers = offersDynamic.whereType<Map<String, dynamic>>().toList();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    // Pull out some “top skills” and descriptions to show like a product page
+    final name = widget.name;
+    final offers = widget.offers;
+
     final topOffers = offers.take(3).toList();
 
     String initials = '';
@@ -37,14 +73,12 @@ class UserProfileScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          // scrollable content
           Expanded(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // “Hero” section – like you’re shopping for this person
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -71,7 +105,7 @@ class UserProfileScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              'Open to swap', // later you can wire this to a real field
+                              'Open to swap',
                               style: TextStyle(
                                 color: Colors.green.shade700,
                                 fontWeight: FontWeight.w500,
@@ -93,7 +127,6 @@ class UserProfileScreen extends StatelessWidget {
 
                   const SizedBox(height: 24),
 
-                  // “What they offer” section
                   Text(
                     'What they offer',
                     style: theme.textTheme.titleMedium?.copyWith(
@@ -111,9 +144,8 @@ class UserProfileScreen extends StatelessWidget {
                             (offer['name'] ?? '').toString().trim();
                         final level =
                             (offer['level'] ?? '').toString().trim();
-                        final label = level.isEmpty
-                            ? skillName
-                            : '$skillName • $level';
+                        final label =
+                            level.isEmpty ? skillName : '$skillName • $level';
 
                         return Chip(
                           label: Text(label),
@@ -134,7 +166,6 @@ class UserProfileScreen extends StatelessWidget {
 
                   const SizedBox(height: 24),
 
-                  // Descriptions like a product description
                   Text(
                     'Details',
                     style: theme.textTheme.titleMedium?.copyWith(
@@ -187,8 +218,11 @@ class UserProfileScreen extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (_) =>
-                                        const RequestSwapScreen(),
+                                    builder: (_) => RequestSwapScreen(
+                                      partnerName: name,
+                                      partnerOffers: offers,
+                                      myOffers: myOffers,
+                                    ),
                                   ),
                                 );
                               },
@@ -204,7 +238,6 @@ class UserProfileScreen extends StatelessWidget {
             ),
           ),
 
-          // CTA at bottom – this is your “Add to cart / Request Swap” button
           SafeArea(
             minimum:
                 const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
@@ -215,16 +248,14 @@ class UserProfileScreen extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => const RequestSwapScreen(),
+                      builder: (_) => RequestSwapScreen(
+                        partnerName: name,
+                        partnerOffers: offers,
+                        myOffers: myOffers,
+                      ),
                     ),
                   );
                 },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                ),
                 child: const Text(
                   'Request Swap',
                   style: TextStyle(
