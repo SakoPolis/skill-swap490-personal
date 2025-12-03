@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'user_profile.dart';
 
 class CategoryResultsScreen extends StatelessWidget {
   final String categoryId;
@@ -49,7 +50,6 @@ class CategoryResultsScreen extends StatelessWidget {
           final filtered = docs.where((doc) {
             final data = doc.data() as Map<String, dynamic>;
 
-            // ---------- 🚫 Don't show the signed-in user ----------
             if (currentUserId != null || currentUserEmail != null) {
               final docUid = (data['uid'] ?? '').toString();
               final docEmail = (data['email'] ?? '').toString();
@@ -66,7 +66,6 @@ class CategoryResultsScreen extends StatelessWidget {
                 return false;
               }
             }
-            // ----------------------------------------------------
 
             final offersDynamic = data['offers'] as List<dynamic>? ?? [];
             final offers =
@@ -119,7 +118,6 @@ class CategoryResultsScreen extends StatelessWidget {
               final offers =
                   offersDynamic.whereType<Map<String, dynamic>>().toList();
 
-              // Only keep offers in this category for display
               final categoryOffers = offers.where((offer) {
                 final cat = (offer['category'] ?? '').toString().trim();
                 return cat == categoryId;
@@ -137,8 +135,6 @@ class CategoryResultsScreen extends StatelessWidget {
   }
 }
 
-// ===================== USER SKILL CARD =====================
-
 class UserSkillCard extends StatelessWidget {
   final String name;
   final List<Map<String, dynamic>> offers;
@@ -153,10 +149,8 @@ class UserSkillCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    // Take first 3 skills for chips
     final topOffers = offers.take(3).toList();
 
-    // Use first offer description as preview if available
     String? firstDescription;
     if (offers.isNotEmpty) {
       final raw = offers.first['description']?.toString().trim() ?? '';
@@ -191,7 +185,6 @@ class UserSkillCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Avatar + name
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -220,9 +213,7 @@ class UserSkillCard extends StatelessWidget {
               ),
             ],
           ),
-
           const SizedBox(height: 10),
-
           if (topOffers.isNotEmpty)
             Wrap(
               spacing: 8,
@@ -253,7 +244,6 @@ class UserSkillCard extends StatelessWidget {
                 fontSize: 13,
               ),
             ),
-
           if (firstDescription != null) ...[
             const SizedBox(height: 8),
             Text(
@@ -266,16 +256,17 @@ class UserSkillCard extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
             ),
           ],
-
           const SizedBox(height: 10),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
-                  Icon(Icons.swap_horiz_rounded,
-                      size: 18, color: Colors.blue.shade600),
+                  Icon(
+                    Icons.swap_horiz_rounded,
+                    size: 18,
+                    color: Colors.blue.shade600,
+                  ),
                   const SizedBox(width: 6),
                   Text(
                     "Open to swap",
@@ -289,7 +280,15 @@ class UserSkillCard extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () {
-                  // Later: navigate to full profile / send request
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => UserProfileScreen(
+                        name: name,
+                        offers: offers,
+                      ),
+                    ),
+                  );
                 },
                 child: const Text('View details'),
               ),

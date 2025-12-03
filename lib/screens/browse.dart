@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'profile_setup.dart';
 import 'category_results.dart';
+import 'user_profile.dart';
+
 
 
 class BrowseScreen extends StatefulWidget {
@@ -254,123 +256,6 @@ class CategoryTile extends StatelessWidget {
 
 // ===================== CATEGORY RESULTS SCREEN =====================
 
-class CategoryResultsScreen extends StatelessWidget {
-  final String categoryId;
-  final String categoryLabel;
-
-  const CategoryResultsScreen({
-    super.key,
-    required this.categoryId,
-    required this.categoryLabel,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Scaffold(
-      backgroundColor: const Color(0xFFF7F9FC),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Text(
-          categoryLabel,
-          style: const TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        centerTitle: true,
-      ),
-      body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('users').snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if (snapshot.hasError) {
-            return const Center(
-              child: Text('Failed to load users. Please try again.'),
-            );
-          }
-
-          final docs = snapshot.data?.docs ?? [];
-
-          final filtered = docs.where((doc) {
-            final data = doc.data() as Map<String, dynamic>;
-            final offersDynamic =
-                data['offers'] as List<dynamic>? ?? [];
-            final offers =
-                offersDynamic.whereType<Map<String, dynamic>>().toList();
-
-            if (offers.isEmpty) return false;
-
-            final hasCategory = offers.any((offer) {
-              final cat = (offer['category'] ?? '').toString().trim();
-              return cat == categoryId;
-            });
-
-            return hasCategory;
-          }).toList();
-
-          if (filtered.isEmpty) {
-            return Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: Text(
-                  'No one has listed skills in "$categoryLabel" yet.\nCheck back soon!',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.grey.shade600,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-            );
-          }
-
-          return ListView.separated(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            itemCount: filtered.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 12),
-            itemBuilder: (context, index) {
-              final doc = filtered[index];
-              final data = doc.data() as Map<String, dynamic>;
-
-              final firstName =
-                  (data['firstName'] ?? '').toString().trim();
-              final lastName =
-                  (data['lastName'] ?? '').toString().trim();
-              final fullName = (firstName.isEmpty && lastName.isEmpty)
-                  ? 'Unnamed user'
-                  : '$firstName $lastName';
-
-              final offersDynamic =
-                  data['offers'] as List<dynamic>? ?? [];
-              final offers =
-                  offersDynamic.whereType<Map<String, dynamic>>().toList();
-
-              // Only keep offers in this category for display
-              final categoryOffers = offers.where((offer) {
-                final cat = (offer['category'] ?? '').toString().trim();
-                return cat == categoryId;
-              }).toList();
-
-              return UserSkillCard(
-                name: fullName,
-                offers: categoryOffers,
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
-}
-
-// ===================== USER SKILL CARD =====================
-
 class UserSkillCard extends StatelessWidget {
   final String name;
   final List<Map<String, dynamic>> offers;
@@ -521,7 +406,15 @@ class UserSkillCard extends StatelessWidget {
               ),
               TextButton(
                 onPressed: () {
-                  // Later: navigate to full profile / send request
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => UserProfileScreen(
+                        name: name,
+                        offers: offers,
+                      ),
+                    ),
+                  );
                 },
                 child: const Text('View details'),
               ),
@@ -532,3 +425,4 @@ class UserSkillCard extends StatelessWidget {
     );
   }
 }
+
