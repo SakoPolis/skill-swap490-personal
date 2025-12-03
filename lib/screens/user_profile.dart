@@ -179,6 +179,22 @@ class UserProfileScreen extends StatelessWidget {
                                 : description,
                             style: const TextStyle(fontSize: 13),
                           ),
+                          const SizedBox(height: 8),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) =>
+                                        const RequestSwapScreen(),
+                                  ),
+                                );
+                              },
+                              child: const Text('Request swap?'),
+                            ),
+                          ),
                         ],
                       ),
                     );
