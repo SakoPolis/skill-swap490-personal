@@ -52,6 +52,59 @@ skill-swap490/
 └─ README.md
 ```
 
+
+Ethical Issues
+
+Privacy Expectations
+The system collects sensitive student data, including technical skills, availability schedules, and experience levels. To meet privacy expectations, TeamMatch restricts access so that students cannot see the full class dataset; only instructors have this privilege. Furthermore, student data is not publicly accessible.
+
+Discrimination & Fairness
+A primary ethical risk in automated grouping is the potential for bias or "clustering" that could marginalize certain students. TeamMatch addresses this by:
+
+    Heterogeneous Grouping: Implementing research-backed principles to ensure balanced skill distribution.
+
+Preventing Clustering: Ensuring high-experience students are distributed across teams rather than grouped together.
+
+Transparency: Generating explanation reports for instructors that justify why each student was assigned to a specific team.
+
+Potential Misuse
+While designed for academic balance, the system could be misused if instructors set "hard constraints" that inadvertently isolate specific students. To prevent this, the system uses a deterministic, rule-based algorithm rather than a "black-box" model, allowing every decision to be traceable and auditable by the department.
+
+Legal Issues
+
+Licensing & Third-Party Software
+The project must comply with the licenses of the web frameworks and AI libraries used to build the AI Recommendation Module. As the system progresses, a full inventory of Open Source Software (OSS) libraries must be maintained to ensure compliance with MIT, Apache, or GPL requirements.
+
+Intellectual Property (IP) & Data Ownership
+
+    User Data: Under educational privacy laws (like FERPA), the student data collected—such as names and IDs—is protected.
+
+System Logic: The "rule-based greedy assignment algorithm" and "normalized skill taxonomy" are the core IP of the SkillSwap Team.
+
+Illegal Use & Liability
+The Communication Module allows for announcements and notifications. There is a risk of users posting copyrighted material or using the platform for unauthorized data scraping. The system mitigates this by restricting "Team Formation" and "Project Management" features to authenticated Instructor roles only.
+
+Security Issues
+
+Sensitive Information Protection
+The system stores several types of sensitive data that require protection:
+
+    User Credentials: Authentication data handled by the User Management Module.
+
+Personal Profiles: Student IDs, skill levels, and availability matrices.
+
+Protection Plan: Data must be secured via encryption (specifically for passwords in the User table) and secure storage protocols.
+
+Attack Vectors & Mitigation
+
+    Unauthorized Access: Malicious users might attempt to bypass role-based access to gain instructor-level privileges. TeamMatch uses strict Access Control (FR-1, FR-2) to ensure students can only submit their own data and view their own team assignments.
+
+Injection Attacks: Since the system handles "Student Input" and "Instructor Configuration," it is vulnerable to SQL Injection. All inputs must be validated for completeness and sanitized before processing.
+
+XSS (Cross-Site Scripting): The "Communication Module" and "Progress Tracking" screens involve user-generated text. The system must sanitize all output to prevent malicious scripts from executing in other users' browsers.
+
+Insecure API Endpoints: Malicious actors could target endpoints like POST /teams/save. These will be protected by session-based authentication and CSRF (Cross-Site Request Forgery) tokens.
+
 ---
 
 ## Documentation
